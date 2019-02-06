@@ -1,3 +1,11 @@
-<p>
-  products-list works!
-</p>
+<ul>
+  <li class="text" *ngFor="let product of products | async">
+    {{product.name}} -- {{product.id}}
+
+
+    <button (click)="updateProduct(product)">Update</button>
+    <button (click)="deleteProduct(product)">Delete</button>
+    <button (click)="getDetails(product)">Details</button>
+  </li>
+  <button (click)="addProduct()">Add</button>
+</ul>
