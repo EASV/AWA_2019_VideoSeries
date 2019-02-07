@@ -15,4 +15,8 @@ export class ProductsListComponent implements OnInit {
     this.products = this.ps.getProducts();
   }
 
+  deleteProduct(product: Product) {
+    this.ps.deleteProduct(product.id);
+  }
+
 }

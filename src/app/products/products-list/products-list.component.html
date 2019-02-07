@@ -1,4 +1,6 @@
 <ul>
   <li class="text" *ngFor="let product of products | async">
     {{product.name}} -- {{product.id}}
+    <button (click)="deleteProduct(product)">Delete</button>
+  </li>
 </ul>

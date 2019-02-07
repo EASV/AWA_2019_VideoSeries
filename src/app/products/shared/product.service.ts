@@ -29,4 +29,9 @@ export class ProductService {
         })
       );
   }
+
+  deleteProduct(id: string) {
+    this.db.doc<Product>('products/' + id)
+      .delete();
+  }
 }
