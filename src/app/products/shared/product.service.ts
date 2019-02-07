@@ -31,7 +31,16 @@ export class ProductService {
   }
 
   deleteProduct(id: string) {
-    this.db.doc<Product>('products/' + id)
-      .delete();
+    this.db.doc<Product>('products/sdljkfndsljknfkljfds')
+      .delete()
+      .then(product => {
+        debugger;
+      })
+      .catch(err => {
+        debugger;
+      })
+      .finally(() => {
+        debugger;
+      });
   }
 }
