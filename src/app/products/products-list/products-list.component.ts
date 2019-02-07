@@ -16,10 +16,14 @@ export class ProductsListComponent implements OnInit {
   }
 
   deleteProduct(product: Product) {
-    this.ps.deleteProduct(product.id)
-      .then(() => {
-        window.alert('product with id: ' + product.id + ' is Deleted');
-      });
+    const obs = this.ps.deleteProduct(product.id);
+    obs.subscribe(productFromFirebase => {
+      debugger;
+        window.alert('product with id: ' + productFromFirebase.id + ' is Deleted');
+      }, error1 => {
+      debugger;
+      window.alert('product not found id: ' + product.id);
+    });
   }
 
 }
