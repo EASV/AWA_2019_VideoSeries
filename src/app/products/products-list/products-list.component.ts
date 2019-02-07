@@ -16,7 +16,10 @@ export class ProductsListComponent implements OnInit {
   }
 
   deleteProduct(product: Product) {
-    this.ps.deleteProduct(product.id);
+    this.ps.deleteProduct(product.id)
+      .then(() => {
+        window.alert('product with id: ' + product.id + ' is Deleted');
+      });
   }
 
 }

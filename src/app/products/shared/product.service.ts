@@ -9,7 +9,9 @@ import {map, tap} from 'rxjs/operators';
 })
 export class ProductService {
 
-  constructor(private db: AngularFirestore) { }
+  constructor(private db: AngularFirestore) {
+    //this.add10Products();
+  }
 
   getProducts(): Observable<Product[]> {
     return this.db
@@ -30,17 +32,15 @@ export class ProductService {
       );
   }
 
-  deleteProduct(id: string) {
-    this.db.doc<Product>('products/' + id)
-      .delete()
-      .then(product => {
-        debugger;
-      })
-      .catch(err => {
-        debugger;
-      })
-      .finally(() => {
-        debugger;
-      });
+  deleteProduct(id: string): Promise<void> {
+    return this.db.doc<Product>('products/' + id)
+      .delete();
+  }
+
+  add10Products() {
+    for (let i = 1; i < 10; i++) {
+      this.db.collection<Product>('products')
+        .add({name: 'p' + i});
+    }
   }
 }
