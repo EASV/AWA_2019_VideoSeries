@@ -29,36 +29,4 @@ export class ProductService {
         })
       );
   }
-
-  getProduct(id: string) {
-    this.db.doc<Product>('products/' + id).get()
-      .subscribe(productFound => {
-
-        const protData = productFound.data() as Product;
-      });
-  }
-
-  update(product: Product) {
-    this.db.doc<Product>('products/' + product.id)
-      .update(product)
-      .then(prod => {
-        debugger;
-      });
-  }
-
-  delete(product: Product) {
-    this.db.doc<Product>('products/' + product.id)
-      .delete()
-      .then(prod => {
-        debugger;
-      });
-  }
-
-  add(product: Product) {
-    this.db.collection<Product>('products')
-      .add(product)
-      .then(prod => {
-        debugger;
-      });
-  }
 }
