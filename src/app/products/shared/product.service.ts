@@ -19,18 +19,6 @@ export class ProductService {
       .pipe(
         map(actions => {
           // actions is an array of DocumentChangeAction
-          /*
-          const prods: Product[] = [];
-          actions.forEach(action => {
-            const data = action.payload.doc.data() as Product;
-            prods.push({
-              id: action.payload.doc.id,
-              name: data.name
-            });
-          });
-          return prods;
-          */
-
           return actions.map(action => {
             const data = action.payload.doc.data() as Product;
             return {

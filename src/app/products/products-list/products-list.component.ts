@@ -15,21 +15,4 @@ export class ProductsListComponent implements OnInit {
     this.products = this.ps.getProducts();
   }
 
-  updateProduct(product: Product) {
-    product.name = product.name + '1';
-    this.ps.update(product);
-  }
-
-  deleteProduct(product: Product) {
-    this.ps.delete(product);
-  }
-
-  addProduct() {
-    this.ps.add({name: 'New Product'});
-  }
-
-  getDetails(product: Product) {
-    this.ps.getProduct(product.id);
-  }
-
 }
