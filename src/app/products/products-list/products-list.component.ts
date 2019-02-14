@@ -13,7 +13,8 @@ export class ProductsListComponent implements OnInit {
   productFormGroup: FormGroup;
   constructor(private ps: ProductService) {
     this.productFormGroup = new FormGroup({
-      name: new FormControl('')
+      name: new FormControl(''),
+      dinko: new FormControl('')
      });
   }
 

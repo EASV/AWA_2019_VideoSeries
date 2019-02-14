@@ -71,7 +71,11 @@ export class ProductService {
 
   addProduct(product: Product): Observable<Product> {
     return from(
-      this.db.collection('products').add(product)
+      this.db.collection('products').add(
+        {
+          name: product.name
+        }
+      )
     ).pipe(
       map(productRef => {
         product.id = productRef.id;
