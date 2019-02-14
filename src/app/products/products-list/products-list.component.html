@@ -4,3 +4,14 @@
     <button (click)="deleteProduct(product)">Delete</button>
   </li>
 </ul>
+
+
+<form [formGroup]="productFormGroup" (ngSubmit)="addProduct()">
+
+  <label>
+    Name
+    <input type="text" formControlName="name">
+  </label>
+
+  <button type="submit">Add</button>
+</form>

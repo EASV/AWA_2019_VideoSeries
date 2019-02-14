@@ -2,6 +2,7 @@ import {Component, OnDestroy, OnInit} from '@angular/core';
 import {Observable, Subscription} from 'rxjs';
 import {ProductService} from '../shared/product.service';
 import {Product} from '../shared/product.model';
+import {FormControl, FormGroup} from '@angular/forms';
 @Component({
   selector: 'app-products-list',
   templateUrl: './products-list.component.html',
@@ -9,7 +10,12 @@ import {Product} from '../shared/product.model';
 })
 export class ProductsListComponent implements OnInit {
   products: Observable<Product[]>;
-  constructor(private ps: ProductService) { }
+  productFormGroup: FormGroup;
+  constructor(private ps: ProductService) {
+    this.productFormGroup = new FormGroup({
+      name: new FormControl('')
+     });
+  }
 
   ngOnInit() {
     this.products = this.ps.getProducts();
@@ -24,6 +30,12 @@ export class ProductsListComponent implements OnInit {
       debugger;
       window.alert('product not found id: ' + product.id);
     });
+  }
+
+  addProduct() {
+    const productdata = this.productFormGroup.value;
+    debugger;
+    //this.ps.
   }
 
 }

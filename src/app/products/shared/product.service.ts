@@ -4,18 +4,18 @@ import {from, Observable, throwError} from 'rxjs';
 import {Product} from './product.model';
 import {first, map, switchMap, tap} from 'rxjs/operators';
 
+const collection_path = 'products';
+
 @Injectable({
   providedIn: 'root'
 })
 export class ProductService {
 
-  constructor(private db: AngularFirestore) {
-    //this.add10Products();
-  }
+  constructor(private db: AngularFirestore) {}
 
   getProducts(): Observable<Product[]> {
     return this.db
-      .collection<Product>('products')
+      .collection<Product>(collection_path)
       // This will return an Observable
       .snapshotChanges()
       .pipe(
@@ -33,7 +33,7 @@ export class ProductService {
   }
 
   deleteProduct(id: string): Observable<Product> {
-    return this.db.doc<Product>('products/' + id)
+    return this.db.doc<Product>(collection_path + '/' + id)
       .get()
       .pipe(
         first(),
@@ -46,7 +46,7 @@ export class ProductService {
             debugger;
           } else {
             return from(
-              this.db.doc<Product>('products/' + id)
+              this.db.doc<Product>(collection_path + '/' + id)
                 .delete()
             ).pipe(
               map(() => {
@@ -67,12 +67,5 @@ export class ProductService {
     });*/
     /*return this.db.doc<Product>('products/' + id)
       .delete();*/
-  }
-
-  add10Products() {
-    for (let i = 1; i < 10; i++) {
-      this.db.collection<Product>('products')
-        .add({name: 'p' + i});
-    }
   }
 }
