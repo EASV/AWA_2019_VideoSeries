@@ -33,9 +33,11 @@ export class ProductsListComponent implements OnInit {
   }
 
   addProduct() {
-    const productdata = this.productFormGroup.value;
-    debugger;
-    //this.ps.
+    const productData = this.productFormGroup.value;
+    this.ps.addProduct(productData)
+      .subscribe(product => {
+        window.alert('product with id: ' + product.id + ' and name : ' + product.name + 'is added');
+      });
   }
 
 }

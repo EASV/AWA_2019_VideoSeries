@@ -68,4 +68,15 @@ export class ProductService {
     /*return this.db.doc<Product>('products/' + id)
       .delete();*/
   }
+
+  addProduct(product: Product): Observable<Product> {
+    return from(
+      this.db.collection('products').add(product)
+    ).pipe(
+      map(productRef => {
+        product.id = productRef.id;
+        return product;
+      })
+    );
+  }
 }
