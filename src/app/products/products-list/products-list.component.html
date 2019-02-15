@@ -13,10 +13,7 @@
     <input type="text" formControlName="name">
   </label>
 
-  <label>
-    Dinko
-    <input type="text" formControlName="dinko">
-  </label>
+  <input type="file" (change)="uploadFile($event)">
 
   <button type="submit">Add</button>
 </form>
