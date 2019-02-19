@@ -3,7 +3,7 @@ import {FileMetadata} from './file-metadata';
 import {from, Observable} from 'rxjs';
 import {AngularFireStorage} from '@angular/fire/storage';
 import {AngularFirestore} from '@angular/fire/firestore';
-import {map} from 'rxjs/operators';
+import {map, switchMap} from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
@@ -14,12 +14,22 @@ export class FileService {
               private db: AngularFirestore) { }
 
   upload(file: File): Observable<FileMetadata> {
-    this.storage.ref('product-pictures/' + file.name)
-      .put(file)
-      .then(() => {
-        debugger;
-      });
-    return Observable.create();
+    return this.addFileMetadata(
+      {
+        name: file.name,
+        type: file.type,
+        size: file.size,
+        lastModified: file.lastModified
+      }
+    ).pipe(
+      switchMap(fileMeta => {
+        return this.storage.ref('product-pictures/' + fileMeta.id)
+          .put(file)
+          .then(() => {
+            debugger;
+          });
+      })
+    );
   }
 
   addFileMetadata(meta: FileMetadata): Observable<FileMetadata> {
