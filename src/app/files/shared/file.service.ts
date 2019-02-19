@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import {FileMetadata} from './file-metadata';
-import {from, Observable} from 'rxjs';
+import {defer, from, Observable} from 'rxjs';
 import {AngularFireStorage} from '@angular/fire/storage';
 import {AngularFirestore} from '@angular/fire/firestore';
 import {map, switchMap} from 'rxjs/operators';
@@ -33,7 +33,7 @@ export class FileService {
   }
 
   addFileMetadata(meta: FileMetadata): Observable<FileMetadata> {
-    return from(
+    return defer(() =>
       this.db.collection('files')
       .add(meta)
     ).pipe(
