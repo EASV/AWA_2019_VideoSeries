@@ -46,8 +46,9 @@ export class ProductsListComponent implements OnInit {
   uploadFile(event) {
     const file = event.target.files[0];
     this.fs.upload(file)
-      .subscribe();
-    debugger;
+      .subscribe(metadata => {
+        debugger;
+      });
   }
 
 }

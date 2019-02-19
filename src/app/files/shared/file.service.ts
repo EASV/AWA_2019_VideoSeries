@@ -23,11 +23,15 @@ export class FileService {
       }
     ).pipe(
       switchMap(fileMeta => {
-        return this.storage.ref('product-pictures/' + fileMeta.id)
+        return defer(() =>
+          this.storage.ref('product-pictures/' + fileMeta.id)
           .put(file)
-          .then(() => {
-            debugger;
-          });
+          .then()
+        ).pipe(
+          map(fileRef => {
+            return fileMeta;
+          })
+        );
       })
     );
   }
