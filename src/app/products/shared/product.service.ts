@@ -73,7 +73,8 @@ export class ProductService {
     return from(
       this.db.collection('products').add(
         {
-          name: product.name
+          name: product.name,
+          picture: product.picture
         }
       )
     ).pipe(

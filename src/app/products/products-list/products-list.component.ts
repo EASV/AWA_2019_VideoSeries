@@ -4,6 +4,7 @@ import {ProductService} from '../shared/product.service';
 import {Product} from '../shared/product.model';
 import {FormControl, FormGroup} from '@angular/forms';
 import {FileService} from '../../files/shared/file.service';
+import {switchMap} from 'rxjs/operators';
 @Component({
   selector: 'app-products-list',
   templateUrl: './products-list.component.html',
@@ -12,6 +13,7 @@ import {FileService} from '../../files/shared/file.service';
 export class ProductsListComponent implements OnInit {
   products: Observable<Product[]>;
   productFormGroup: FormGroup;
+  fileToUpload: File;
   constructor(private ps: ProductService,
                 private fs: FileService) {
     this.productFormGroup = new FormGroup({
@@ -37,18 +39,22 @@ export class ProductsListComponent implements OnInit {
 
   addProduct() {
     const productData = this.productFormGroup.value;
-    this.ps.addProduct(productData)
-      .subscribe(product => {
-        window.alert('product with id: ' + product.id + ' and name : ' + product.name + 'is added');
-      });
+    if (this.fileToUpload) {
+      this.fs.upload(this.fileToUpload)
+        .pipe(
+          switchMap(metadata => {
+            productData.picture = metadata.id;
+            return this.ps.addProduct(productData);
+          })
+        )
+        .subscribe(product => {
+          window.alert('product with id: ' + product.id + ' and name : ' + product.name + 'is added');
+        });
+    }
   }
 
   uploadFile(event) {
-    const file = event.target.files[0];
-    this.fs.upload(file)
-      .subscribe(metadata => {
-        debugger;
-      });
+    this.fileToUpload = event.target.files[0];
   }
 
 }
