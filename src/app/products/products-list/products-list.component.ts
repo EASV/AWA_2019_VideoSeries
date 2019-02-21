@@ -43,7 +43,7 @@ export class ProductsListComponent implements OnInit {
       this.fs.upload(this.fileToUpload)
         .pipe(
           switchMap(metadata => {
-            productData.picture = metadata.id;
+            productData.pictureId = metadata.id;
             return this.ps.addProduct(productData);
           })
         )
