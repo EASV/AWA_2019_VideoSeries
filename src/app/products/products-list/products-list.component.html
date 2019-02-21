@@ -1,3 +1,4 @@
+<button routerLink="add">+</button>
 <ul>
   <li class="text" *ngFor="let product of products | async">
     <img [src]="product.url" *ngIf="product.url" style="width: 24px; height: 24px;">
@@ -5,16 +6,3 @@
     <button (click)="deleteProduct(product)">Delete</button>
   </li>
 </ul>
-
-
-<form [formGroup]="productFormGroup" (ngSubmit)="addProduct()">
-
-  <label>
-    Name
-    <input type="text" formControlName="name">
-  </label>
-
-  <input type="file" (change)="uploadFile($event)">
-
-  <button type="submit">Add</button>
-</form>

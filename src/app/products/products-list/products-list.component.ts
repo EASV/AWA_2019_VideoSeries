@@ -12,13 +12,8 @@ import {switchMap, tap} from 'rxjs/operators';
 })
 export class ProductsListComponent implements OnInit {
   products: Observable<Product[]>;
-  productFormGroup: FormGroup;
-  fileToUpload: File;
   constructor(private ps: ProductService,
                 private fs: FileService) {
-    this.productFormGroup = new FormGroup({
-      name: new FormControl('')
-     });
   }
 
   ngOnInit() {
@@ -47,25 +42,4 @@ export class ProductsListComponent implements OnInit {
       window.alert('product not found id: ' + product.id);
     });
   }
-
-  addProduct() {
-    const productData = this.productFormGroup.value;
-    if (this.fileToUpload) {
-      this.fs.upload(this.fileToUpload)
-        .pipe(
-          switchMap(metadata => {
-            productData.pictureId = metadata.id;
-            return this.ps.addProduct(productData);
-          })
-        )
-        .subscribe(product => {
-          window.alert('product with id: ' + product.id + ' and name : ' + product.name + 'is added');
-        });
-    }
-  }
-
-  uploadFile(event) {
-    this.fileToUpload = event.target.files[0];
-  }
-
 }
