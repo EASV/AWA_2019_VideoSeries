@@ -4,7 +4,7 @@ import {ProductService} from '../shared/product.service';
 import {Product} from '../shared/product.model';
 import {FormControl, FormGroup} from '@angular/forms';
 import {FileService} from '../../files/shared/file.service';
-import {switchMap} from 'rxjs/operators';
+import {switchMap, tap} from 'rxjs/operators';
 @Component({
   selector: 'app-products-list',
   templateUrl: './products-list.component.html',
@@ -17,13 +17,24 @@ export class ProductsListComponent implements OnInit {
   constructor(private ps: ProductService,
                 private fs: FileService) {
     this.productFormGroup = new FormGroup({
-      name: new FormControl(''),
-      dinko: new FormControl('')
+      name: new FormControl('')
      });
   }
 
   ngOnInit() {
-    this.products = this.ps.getProducts();
+    this.products = this.ps.getProducts()
+      .pipe(
+        tap(products => {
+          products.forEach(product => {
+            if (product.pictureId) {
+              this.fs.getFileUrl(product.pictureId)
+                .subscribe(url => {
+                  product.url = url;
+                });
+            }
+          });
+        })
+      );
   }
 
   deleteProduct(product: Product) {
