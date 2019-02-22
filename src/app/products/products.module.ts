@@ -6,6 +6,7 @@ import { ProductsListComponent } from './products-list/products-list.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import {FilesModule} from '../files/files.module';
 import { ProductAddComponent } from './product-add/product-add.component';
+import {ImageCropperModule} from 'ngx-image-cropper';
 
 @NgModule({
   declarations: [ProductsListComponent, ProductAddComponent],
@@ -13,7 +14,8 @@ import { ProductAddComponent } from './product-add/product-add.component';
     CommonModule,
     ProductsRoutingModule,
     ReactiveFormsModule,
-    FilesModule
+    FilesModule,
+    ImageCropperModule
   ]
 })
 export class ProductsModule { }
