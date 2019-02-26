@@ -4,6 +4,7 @@ import {from, Observable, throwError} from 'rxjs';
 import {Product} from './product.model';
 import {first, map, switchMap, tap} from 'rxjs/operators';
 import {ImageMetadata} from '../../files/shared/image-metadata';
+import {FileService} from '../../files/shared/file.service';
 
 const collection_path = 'products';
 
@@ -12,7 +13,8 @@ const collection_path = 'products';
 })
 export class ProductService {
 
-  constructor(private db: AngularFirestore) {}
+  constructor(private db: AngularFirestore,
+              private fs: FileService) {}
 
   getProducts(): Observable<Product[]> {
     return this.db
@@ -71,8 +73,15 @@ export class ProductService {
       .delete();*/
   }
 
-  addProductWithImage(product: Product, imageMeta: ImageMetadata) {
-
+  addProductWithImage(product: Product, imageMeta: ImageMetadata)
+    : Observable<Product> {
+    return this.fs.uploadImage(imageMeta)
+      .pipe(
+        switchMap(metadata => {
+          product.pictureId = metadata.id;
+          return this.addProduct(product);
+        })
+      );
   }
 
   addProduct(product: Product): Observable<Product> {

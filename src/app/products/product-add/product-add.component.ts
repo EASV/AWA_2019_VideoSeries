@@ -7,6 +7,7 @@ import {ActivatedRoute, Router} from '@angular/router';
 import {ImageCroppedEvent} from 'ngx-image-cropper';
 import {FileMetadata} from '../../files/shared/file-metadata';
 import {ImageMetadata} from '../../files/shared/image-metadata';
+import {isNullOrUndefined} from 'util';
 
 @Component({
   selector: 'app-product-add',
@@ -16,13 +17,12 @@ import {ImageMetadata} from '../../files/shared/image-metadata';
 export class ProductAddComponent implements OnInit {
 
   productFormGroup: FormGroup;
-  fileToUpload: File;
   imageChangedEvent: any = '';
   croppedImage: any = '';
+  croppedBlob: Blob;
   constructor(private router: Router,
               private activatedRoute: ActivatedRoute,
-              private ps: ProductService,
-              private fs: FileService) {
+              private ps: ProductService) {
     this.productFormGroup = new FormGroup({
      name: new FormControl('')
     });
@@ -33,20 +33,31 @@ export class ProductAddComponent implements OnInit {
 
   addProduct() {
     const productData = this.productFormGroup.value;
-    if (this.fileToUpload) {
-      this.fs.upload(this.fileToUpload)
-        .pipe(
-          switchMap(metadata => {
-            productData.pictureId = metadata.id;
-            return this.ps.addProduct(productData);
-          })
-        )
-        .subscribe(product => {
-          this.router.navigate(['../'],
-            {relativeTo: this.activatedRoute});
-          // window.alert('product with id: ' + product.id + ' and name : ' + product.name + 'is added');
-        });
+    this.ps.addProductWithImage(
+      productData,
+      this.getMetaDataForImage()
+    ).subscribe(product => {
+      this.router.navigate(['../'],
+        {relativeTo: this.activatedRoute});
+      // window.alert('product with id: ' + product.id + ' and name : ' + product.name + 'is added');
+    });
+  }
+
+  private getMetaDataForImage(): ImageMetadata {
+    if (this.imageChangedEvent && this.imageChangedEvent.target &&
+      this.imageChangedEvent.target.files &&
+      this.imageChangedEvent.target.files.length > 0) {
+      const fileBeforeCrop = this.imageChangedEvent.target.files[0];
+      return {
+        imageBlob: this.croppedBlob,
+        fileMeta: {
+          name: fileBeforeCrop.name,
+          type: 'image/png',
+          size: fileBeforeCrop.size
+        }
+      };
     }
+    return undefined;
   }
 
   uploadFile(event) {
@@ -58,12 +69,7 @@ export class ProductAddComponent implements OnInit {
   imageCropped(event: ImageCroppedEvent) {
     // Preview
     this.croppedImage = event.base64;
-    // converting for upload
-    const fileBeforeCrop = this.imageChangedEvent.target.files[0];
-    this.fileToUpload = new File(
-      [event.file],
-      fileBeforeCrop.name
-    , {type: fileBeforeCrop.type});
+    this.croppedBlob = event.file;
   }
 
 }
