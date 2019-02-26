@@ -75,16 +75,22 @@ export class ProductService {
 
   addProductWithImage(product: Product, imageMeta: ImageMetadata)
     : Observable<Product> {
-    return this.fs.uploadImage(imageMeta)
-      .pipe(
-        switchMap(metadata => {
-          product.pictureId = metadata.id;
-          return this.addProduct(product);
-        })
-      );
+    if (imageMeta && imageMeta.fileMeta
+      && imageMeta.fileMeta.name && imageMeta.fileMeta.type &&
+      (imageMeta.imageBlob || imageMeta.base64Image)) {
+      return this.fs.uploadImage(imageMeta)
+        .pipe(
+          switchMap(metadata => {
+            product.pictureId = metadata.id;
+            return this.addProduct(product);
+          })
+        );
+    } else {
+      throw Error('You need better metadata');
+    }
   }
 
-  addProduct(product: Product): Observable<Product> {
+  private addProduct(product: Product): Observable<Product> {
     return from(
       this.db.collection('products').add(
         {
