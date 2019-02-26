@@ -4,6 +4,7 @@ import {switchMap} from 'rxjs/operators';
 import {ProductService} from '../shared/product.service';
 import {FileService} from '../../files/shared/file.service';
 import {ActivatedRoute, Router} from '@angular/router';
+import {ImageCroppedEvent} from 'ngx-image-cropper';
 
 @Component({
   selector: 'app-product-add',
@@ -15,6 +16,7 @@ export class ProductAddComponent implements OnInit {
   productFormGroup: FormGroup;
   fileToUpload: File;
   imageChangedEvent: any = '';
+  croppedImage: any = '';
   constructor(private router: Router,
               private activatedRoute: ActivatedRoute,
               private ps: ProductService,
@@ -48,7 +50,18 @@ export class ProductAddComponent implements OnInit {
   uploadFile(event) {
     this.imageChangedEvent = event;
     // Going away soon.. Bye bye..
-    this.fileToUpload = event.target.files[0];
+    // this.fileToUpload = event.target.files[0];
+  }
+
+  imageCropped(event: ImageCroppedEvent) {
+    // Preview
+    this.croppedImage = event.base64;
+    // converting for upload
+    const fileBeforeCrop = this.imageChangedEvent.target.files[0];
+    this.fileToUpload = new File(
+      [event.file],
+      fileBeforeCrop.name
+    , {type: fileBeforeCrop.type});
   }
 
 }
