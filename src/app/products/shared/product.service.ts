@@ -3,6 +3,7 @@ import {AngularFirestore} from '@angular/fire/firestore';
 import {from, Observable, throwError} from 'rxjs';
 import {Product} from './product.model';
 import {first, map, switchMap, tap} from 'rxjs/operators';
+import {ImageMetadata} from '../../files/shared/image-metadata';
 
 const collection_path = 'products';
 
@@ -68,6 +69,10 @@ export class ProductService {
     });*/
     /*return this.db.doc<Product>('products/' + id)
       .delete();*/
+  }
+
+  addProductWithImage(product: Product, imageMeta: ImageMetadata) {
+
   }
 
   addProduct(product: Product): Observable<Product> {

@@ -5,6 +5,8 @@ import {ProductService} from '../shared/product.service';
 import {FileService} from '../../files/shared/file.service';
 import {ActivatedRoute, Router} from '@angular/router';
 import {ImageCroppedEvent} from 'ngx-image-cropper';
+import {FileMetadata} from '../../files/shared/file-metadata';
+import {ImageMetadata} from '../../files/shared/image-metadata';
 
 @Component({
   selector: 'app-product-add',
