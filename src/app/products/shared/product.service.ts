@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import {AngularFirestore} from '@angular/fire/firestore';
 import {from, Observable, throwError} from 'rxjs';
 import {Product} from './product.model';
-import {first, map, switchMap, tap} from 'rxjs/operators';
+import {catchError, first, map, switchMap, tap} from 'rxjs/operators';
 import {ImageMetadata} from '../../files/shared/image-metadata';
 import {FileService} from '../../files/shared/file.service';
 
@@ -83,10 +83,13 @@ export class ProductService {
           switchMap(metadata => {
             product.pictureId = metadata.id;
             return this.addProduct(product);
+          }),
+          catchError((err, caught) => {
+            return throwError(err);
           })
         );
     } else {
-      throw Error('You need better metadata');
+      return throwError('You need better metadata');
     }
   }
 

@@ -40,7 +40,10 @@ export class ProductAddComponent implements OnInit {
       this.router.navigate(['../'],
         {relativeTo: this.activatedRoute});
       // window.alert('product with id: ' + product.id + ' and name : ' + product.name + 'is added');
-    });
+    },
+        error1 => {
+          window.alert('Bad stuff happened: ' + error1);
+        });
   }
 
   private getMetaDataForImage(): ImageMetadata {
